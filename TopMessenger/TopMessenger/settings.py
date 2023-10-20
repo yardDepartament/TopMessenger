@@ -25,8 +25,48 @@ SECRET_KEY = 'django-insecure-pe0@s9w6o$jn_m($0-tharqmg+kw+k*j!5+8hmukj1te5=o!vn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+DOMAIN_NAME = 'pleasing-hopefully-tetra.ngrok-free.app'
+# FRONTEND_DOMAIN_NAME = 'indirectly-assured-mayfly.ngrok-free.app'
+FRONTEND_DOMAIN_NAME = 'localhost'
 
+ALLOWED_HOSTS = [
+    DOMAIN_NAME,
+    '127.0.0.1',
+    'localhost',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", # штобы работал клиент на локалхост
+    f"https://{FRONTEND_DOMAIN_NAME}",  # ngrok домен фронтенда
+]
+
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 1209600  # Например, 2 недели
+SESSION_COOKIE_PATH = '/'
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SECURE = False  # Установите в True, если используете HTTPS
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Закрытие браузера приводит к истечению срока действия сессии
+SESSION_COOKIE_NAME = 'sessionid'  # Имя cookie, в котором хранится сессия
+SESSION_CACHE_ALIAS = 'default'
+
+LOGIN_URL = 'auth_user'
+
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Application definition
 
@@ -37,6 +77,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +89,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 'api.middlewares.CheckRefererMiddleware',
 ]
 
 ROOT_URLCONF = 'TopMessenger.urls'
